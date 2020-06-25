@@ -1,0 +1,35 @@
+version: '3'
+
+#hostでデータを保持するためのボリュームを作成
+volumes:
+  db-data:
+
+services:
+  #なんでもよい
+  web:
+  #buildコンテクストがカレントディレクトリという意味
+    build: .
+    ports:
+      - '3000:3000'
+    volumes:
+      - '.:/product-register'
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+    tty: true
+    stdin_open: true
+    #dbコンテナが作られてからwevのコンテナう作る
+    depends_on:
+      - db
+    #webコンテナからdbコンテナにアクセスできるようにする
+    links:
+      - db
+
+  db:
+    #今回はversion指定せずlatest
+    image: postgres
+    #こちらにもパスの設定が必要になった
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+    #docker-volumeを作成
+    volumes:
+      - 'db-data:/var/lib/postgresql/data'

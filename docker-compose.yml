@@ -14,7 +14,7 @@ services:
     volumes:
       - '.:/product-register'
     environment:
-      - 'POSTGRES_PASSWORD: postgres'
+      - 'POSTGRES_PASSWORD=postgres'
     tty: true
     stdin_open: true
     #dbコンテナが作られてからwevのコンテナう作る

@@ -29,7 +29,7 @@ services:
     image: postgres
     #こちらにもパスの設定が必要になった
     environment:
-      - 'POSTGRES_HOST_AUTHMETHOD=trust'
+      - 'POSTGRES_HOST_AUTH_METHOD=trust'
     #docker-volumeを作成
     volumes:
       - 'db-data:/var/lib/postgresql/data'

@@ -11,5 +11,5 @@ WORKDIR /product-register
 COPY Gemfile Gemfile.lock /product-register/
 RUN bundle install
 #本番環境の追加コード、カレントディレクトリ全てをコピー
-COPY ..
+COPY . .
 CMD ["rails", "s"]

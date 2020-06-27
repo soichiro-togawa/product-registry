@@ -3,8 +3,20 @@ sudo: required
 services: docker
 before_install:
   - docker-compose up --build -d
+  #-u-pでインタラクティブを回避
+  - docker login -u "$HEROKU_USERNAME" -p "$HEROKU_API_KEY" registry.heroku.com  
 script:
   - docker-compose exec --env 'RAILS_ENV=test' web rails db:create
   - docker-compose exec --env 'RAILS_ENV=test' web rails db:migrate
   - docker-compose exec --env 'RAILS_ENV=test' web rails test
+
+deploy:
+  provider: script
+  script:
+    docker build -t registry.heroku.com/$HEROKU_APP_NAME/web -f Dockerfile.prod .;
+    docker push registry.heroku.com/$HEROKU_APP_NAME/web;
+    #HERKOU_APIKEYがると自動でherokuにログインしてくれる。dbcreateは不要
+    heroku run -app $HEROKU_APP_NAME rails db:migrate;
+  on:
+    branch master     
 
